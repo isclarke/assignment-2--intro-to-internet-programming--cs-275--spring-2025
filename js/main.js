@@ -10,19 +10,19 @@
 // DON’T PROCEED UNTIL YOU’RE SURE ESLINT AND EDITORCONFIG ARE WORKING CORRECTLY
 // -----------------------------------------------------------------------------
 let loadJSONP = (url) => {
-    let script = document.createElement('script');
+    let script = document.createElement(`script`);
     script.src = url;
     document.body.appendChild(script);
 };
 
 // Callback function
 let callback = (data) => {
-    let carousel = document.querySelector('#carousel');
+    let carousel = document.querySelector(`#carousel`);
 
     data.forEach((item, index) => {
-        let slide = document.createElement('div');
-        slide.classList.add('slide');
-        if (index === 0) slide.classList.add('active');
+        let slide = document.createElement(`div`);
+        slide.classList.add(`slide`);
+        if (index === 0) slide.classList.add(`active`);
 
         slide.innerHTML = `
             <img src="${item.cover_image.path}" alt="${item.cover_image.alt_content}" width="${item.cover_image.width}" height="${item.cover_image.height}">
@@ -34,27 +34,27 @@ let callback = (data) => {
     });
 };
 
-loadJSONP('data.json');
+loadJSONP(`data.json`);
 
 let currentIndex = 0;
 let slides = [];
 
 let updateSlides = () => {
-    slides = document.querySelectorAll('.slide');
+    slides = document.querySelectorAll(`.slide`);
 };
 
 let showSlide = (index) => {
     slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
+        slide.classList.toggle(`active`, i === index);
     });
 };
 
-document.querySelector('#next').addEventListener('click', () => {
+document.querySelector(`#next`).addEventListener(`click`, () => {
     currentIndex = (currentIndex + 1) % slides.length;
     showSlide(currentIndex);
 });
 
-document.querySelector('#prev').addEventListener('click', () => {
+document.querySelector(`#prev`).addEventListener(`click`, () => {
     currentIndex = (currentIndex - 1 + slides.length) % slides.length;
     showSlide(currentIndex);
 });
