@@ -19,7 +19,6 @@ let createDirs = (done) => {
     done();
 };
 
-// Linting CSS files
 let lintCSS = () => {
     return gulp.src(`src/css/**/*.css`)
         .pipe(stylelint({
@@ -32,12 +31,6 @@ let scripts = () => {
         .pipe(babel({ presets: [`@babel/preset-env`] }))
         .pipe(uglify()) // Minify JavaScript
         .pipe(gulp.dest(`prod/js`));
-};
-
-let styles = () => {
-    return gulp.src(`src/css/**/*.css`)
-        .pipe(cleanCSS()) // Minify CSS
-        .pipe(gulp.dest(`prod/css`));
 };
 
 let html = () => {
@@ -54,14 +47,14 @@ let lintJS = () => {
 };
 
 let copyAssets = () => {
-    return gulp.src(`src/img/**/*`) // Adjust the path as necessary
+    return gulp.src(`src/img/**/*`)
         .pipe(gulp.dest(`prod/img`));
 };
 
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`src/js/**/*.js`, gulp.series(lintJS, scripts));
-    gulp.watch(`src/css/**/*.css`, gulp.series(lintCSS, styles));
+    gulp.watch(`src/css/**/*.css`, gulp.series(lintCSS));
     gulp.watch(`index.html`, gulp.series(html));
 };
 
@@ -69,7 +62,7 @@ let buildProd = gulp.series(
     createDirs,
     html,
     scripts,
-    gulp.parallel(copyAssets, styles)
+    gulp.parallel(copyAssets)
 );
 
 exports.lint = gulp.parallel(lintJS, lintCSS);
