@@ -35,3 +35,10 @@ let callback = (data) => {
 };
 
 loadJSONP('data.json');
+
+let currentIndex = 0;
+let slides = [];
+
+let updateSlides = () => {
+    slides = document.querySelectorAll('.slide');
+};
