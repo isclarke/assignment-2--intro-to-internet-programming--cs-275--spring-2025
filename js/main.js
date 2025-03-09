@@ -9,6 +9,27 @@
 //
 // DON’T PROCEED UNTIL YOU’RE SURE ESLINT AND EDITORCONFIG ARE WORKING CORRECTLY
 // -----------------------------------------------------------------------------
-window.onload = () => {
-       alert('Test');
-}
+let loadJSONP = (url) => {
+    let script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+};
+
+// Callback function
+let callback = (data) => {
+    let carousel = document.querySelector('#carousel');
+
+    data.forEach((item, index) => {
+        let slide = document.createElement('div');
+        slide.classList.add('slide');
+        if (index === 0) slide.classList.add('active');
+
+        slide.innerHTML = `
+            <img src="${item.cover_image.path}" alt="${item.cover_image.alt_content}" width="${item.cover_image.width}" height="${item.cover_image.height}">
+            <h2>${item.artist} - ${item.album}</h2>
+            <p><a href="${item.url}" target="_blank">More Info</a></p>
+        `;
+
+        carousel.appendChild(slide);
+    });
+};
