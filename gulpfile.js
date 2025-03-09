@@ -33,6 +33,12 @@ let scripts = () => {
         .pipe(gulp.dest(`prod/js`));
 };
 
+let styles = () => {
+    return gulp.src(`styles/**/*.css`) // Match all CSS files in the styles folder
+        .pipe(cleanCSS()) // Minify CSS
+        .pipe(gulp.dest(`prod/css`));
+};
+
 let html = () => {
     return gulp.src(`index.html`)
         .pipe(htmlclean())
@@ -54,7 +60,7 @@ let copyAssets = () => {
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`src/js/**/*.js`, gulp.series(lintJS, scripts));
-    gulp.watch(`src/css/**/*.css`, gulp.series(lintCSS));
+    gulp.watch(`src/css/**/*.css`, gulp.series(lintCSS, styles));
     gulp.watch(`index.html`, gulp.series(html));
 };
 
@@ -62,6 +68,7 @@ let buildProd = gulp.series(
     createDirs,
     html,
     scripts,
+    styles,
     gulp.parallel(copyAssets)
 );
 
