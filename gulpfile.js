@@ -10,7 +10,7 @@ const fs = require(`fs`);
 
 
 let createDirs = (done) => {
-    const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/assets`];
+    const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html` ];
     dirs.forEach(dir => {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
@@ -42,8 +42,8 @@ let styles = () => {
 
 let html = () => {
     return gulp.src(`index.html`)
-        .pipe(htmlclean()) // Clean HTML
-        .pipe(gulp.dest(`prod`));
+        .pipe(htmlclean())
+        .pipe(gulp.dest(`prod/html`));
 };
 
 let lintJS = () => {
@@ -58,11 +58,6 @@ let copyAssets = () => {
         .pipe(gulp.dest(`prod/img`));
 };
 
-let copyData = () => {
-    return gulp.src(`src/data.json`) // Adjust the path as necessary
-        .pipe(gulp.dest(`prod`));
-};
-
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`src/js/**/*.js`, gulp.series(lintJS, scripts));
@@ -73,9 +68,8 @@ let watchFiles = () => {
 let buildProd = gulp.series(
     createDirs,
     html,
-    styles,
     scripts,
-    gulp.parallel(copyAssets, copyData)
+    gulp.parallel(copyAssets, styles)
 );
 
 exports.lint = gulp.parallel(lintJS, lintCSS);
