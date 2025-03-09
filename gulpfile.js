@@ -4,7 +4,7 @@ const stylelint = require('gulp-stylelint');
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const babel = require('gulp-babel');
-const htmlmin = require('gulp-htmlmin');
+const htmlclean = require('gulp-htmlclean');
 const connect = require('gulp-connect');
 const sourcemaps = require('gulp-sourcemaps');
 
@@ -41,7 +41,7 @@ let styles = () => {
 
 let html = () => {
     return gulp.src('index.html')
-        .pipe(htmlmin({ collapseWhitespace: true }))
+        .pipe(htmlclean())  // Replace gulp-htmlmin with gulp-htmlclean
         .pipe(gulp.dest('prod'));
 };
 
