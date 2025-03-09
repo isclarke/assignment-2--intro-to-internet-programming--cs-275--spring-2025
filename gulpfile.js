@@ -7,6 +7,19 @@ const babel = require('gulp-babel');
 const htmlclean = require('gulp-htmlclean');
 const connect = require('gulp-connect');
 const sourcemaps = require('gulp-sourcemaps');
+const fs = require('fs');
+const path = require('path');
+
+// Ensure 'prod/js' and 'prod/css' directories exist
+let createDirs = (done) => {
+    const dirs = ['prod/js', 'prod/css'];
+    dirs.forEach(dir => {
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+    });
+    done();
+};
 
 let lintJS = () => {
     return gulp.src('src/js/**/*.js')
@@ -41,7 +54,7 @@ let styles = () => {
 
 let html = () => {
     return gulp.src('index.html')
-        .pipe(htmlclean())  // Replace gulp-htmlmin with gulp-htmlclean
+        .pipe(htmlclean())
         .pipe(gulp.dest('prod'));
 };
 
@@ -53,5 +66,5 @@ let watchFiles = () => {
 };
 
 exports.lint = gulp.parallel(lintJS, lintCSS);
-exports.build = gulp.series(html, styles, scripts);
+exports.build = gulp.series(createDirs, html, styles, scripts);
 exports.default = gulp.series(exports.lint, watchFiles);
