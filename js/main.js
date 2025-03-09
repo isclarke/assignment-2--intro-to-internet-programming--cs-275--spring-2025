@@ -33,3 +33,5 @@ let callback = (data) => {
         carousel.appendChild(slide);
     });
 };
+
+loadJSONP('data.json');
