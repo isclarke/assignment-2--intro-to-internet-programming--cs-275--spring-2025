@@ -9,32 +9,34 @@ const connect = require('gulp-connect');
 const sourcemaps = require('gulp-sourcemaps');
 
 let lintJS = () => {
-    return gulp.src('main.js')
+    return gulp.src('src/js/**/*.js')
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 };
 
 let lintCSS = () => {
-    return gulp.src('main.css')
+    return gulp.src('src/css/**/*.css')
         .pipe(stylelint({
             reporters: [{ formatter: 'string', console: true }]
         }));
 };
 
 let scripts = () => {
-    return gulp.src('main.js')
+    return gulp.src('src/js/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(babel({ presets: ['@babel/preset-env'] }))
         .pipe(uglify())
         .pipe(sourcemaps.write('.'))
-        .pipe(gulp.dest('prod'));
+        .pipe(gulp.dest('prod/js'));
 };
 
 let styles = () => {
-    return gulp.src('main.css')
+    return gulp.src('src/css/**/*.css')
+        .pipe(sourcemaps.init())
         .pipe(cleanCSS())
-        .pipe(gulp.dest('prod'));
+        .pipe(sourcemaps.write('.'))
+        .pipe(gulp.dest('prod/css'));
 };
 
 let html = () => {
@@ -45,8 +47,9 @@ let html = () => {
 
 let watchFiles = () => {
     connect.server({ livereload: true });
-    gulp.watch('main.js', gulp.series(lintJS, scripts));
-    gulp.watch('main.css', gulp.series(lintCSS, styles));
+    gulp.watch('src/js/**/*.js', gulp.series(lintJS, scripts));
+    gulp.watch('src/css/**/*.css', gulp.series(lintCSS, styles));
+    gulp.watch('index.html', gulp.series(html));
 };
 
 exports.lint = gulp.parallel(lintJS, lintCSS);
