@@ -22,3 +22,18 @@ h1 {
   align-items: center;
   position: relative;
 }
+
+.carousel-slide p {
+  text-align: center;
+  margin: 0;
+  font-weight: 300;
+}
+
+.carousel-slide {
+  flex-shrink: 0;
+  width: 640px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
