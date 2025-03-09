@@ -42,3 +42,21 @@ let slides = [];
 let updateSlides = () => {
     slides = document.querySelectorAll('.slide');
 };
+
+let showSlide = (index) => {
+    slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === index);
+    });
+};
+
+document.querySelector('#next').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+});
+
+document.querySelector('#prev').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    showSlide(currentIndex);
+});
+
+setTimeout(updateSlides, 1000);
