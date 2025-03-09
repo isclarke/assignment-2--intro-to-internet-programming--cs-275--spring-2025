@@ -1,14 +1,9 @@
-/* -----------------------------------------------------------------------------
-// This file includes deliberate errors in order for you to verify that
-// Stylelint and EditorConfig are working properly. If both tools are, indeed,
-// working correctly, then you’d see various errors in your editor about
-// indentation and violations of CSS syntax. When you save this file, your
-// editor should strip all excess newlines and whitespace characters from the
-// file. If both of these events occur, then Stylelint and EditorConfig are
-// working correctly.
-//
-// DON’T PROCEED UNTIL YOU’RE SURE STYLELINT AND EDITORCONFIG ARE WORKING RIGHT
-// -------------------------------------------------------------------------- */
-abcdef {
-     color: cs275
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
