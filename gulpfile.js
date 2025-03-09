@@ -31,7 +31,12 @@ let lintJS = () => {
 let lintCSS = () => {
     return gulp.src('src/css/**/*.css')
         .pipe(stylelint({
-            reporters: [{ formatter: 'string', console: true }]
+            reporters: [
+                {
+                    formatter: 'string',
+                    console: true
+                }
+            ]
         }));
 };
 
