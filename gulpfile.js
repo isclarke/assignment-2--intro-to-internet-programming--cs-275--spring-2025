@@ -3,6 +3,7 @@ const eslint = require(`gulp-eslint`);
 const stylelint = require(`gulp-stylelint`);
 const cleanCSS = require(`gulp-clean-css`);
 const uglify = require(`gulp-uglify`);
+const jsonTransform = require(`gulp-json-transform`);
 const babel = require(`gulp-babel`);
 const htmlclean = require(`gulp-htmlclean`);
 const connect = require(`gulp-connect`);
@@ -59,17 +60,23 @@ let copyAssets = () => {
     return gulp.src(`img/**/*`)
         .pipe(gulp.dest(`prod/img`));
 };
-let copyData = () => {
+
+let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
+        .pipe(jsonTransform(data => {
+            // Convert to JSONP format by wrapping in a callback function
+            return `callback(${JSON.stringify(data)});`;
+        }, 2)) // Indentation of 2 spaces
         .pipe(gulp.dest(`prod/data`));
 };
+
 
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles));
     gulp.watch(`index.html`, gulp.series(html));
-    gulp.watch(`data.json`, gulp.series(copyData));
+    gulp.watch(`data.json`, gulp.series(cleanAndCopyData));
     gulp.watch(`img/**/*`, gulp.series(copyAssets));
 };
 
@@ -78,10 +85,11 @@ let buildProd = gulp.series(
     html,
     scripts,
     styles,
-    gulp.parallel(copyAssets, copyData)
+    gulp.parallel(copyAssets, cleanAndCopyData)
 );
 
 // Export tasks
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.build = gulp.series(buildProd);
 exports.default = gulp.series(exports.lint, watchFiles);
+exports.cleanAndCopyData = cleanAndCopyData;
