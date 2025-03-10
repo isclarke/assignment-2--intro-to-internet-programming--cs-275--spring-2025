@@ -17,23 +17,55 @@ const createCarousel = (albums) => {
     // Populate carousel with albums
     albums.forEach((album, i) => {
         const carouselItem = document.createElement(`div`);
-        carouselItem.className = `carousel-item ${i === 0 ? `active` : ``}`;
+        carouselItem.classList.add(`carousel-item`);
+        if (i === 0) {
+            carouselItem.classList.add(`active`);
+        }
 
-        carouselItem.innerHTML = `
-            <div class="carousel-image">
-                <img src="${album.cover_image.path}"
-                     alt="${album.cover_image.alt_content}"
-                     width="${album.cover_image.width}"
-                     height="${album.cover_image.height}">
-            </div>
-            <div class="carousel-content">
-                <div class="album-name">${album.artist} - ${album.album}</div>
-                <p><strong>Review:</strong> ${album.review.content}</p>
-                <p><strong>Source:</strong> <a href="${album.review.url}" target="_blank">${album.review.source}</a></p>
-                <p><a href="${album.url}" target="_blank">Visit Artist</a></p>
-            </div>
-        `;
+        // Create and append the carousel image
+        const carouselImage = document.createElement(`div`);
+        carouselImage.classList.add(`carousel-image`);
 
+        const img = document.createElement(`img`);
+        img.src = album.cover_image.path;
+        img.alt = album.cover_image.alt_content;
+        img.width = album.cover_image.width;
+        img.height = album.cover_image.height;
+
+        carouselImage.appendChild(img);
+
+        // Create and append the carousel content
+        const carouselContent = document.createElement(`div`);
+        carouselContent.classList.add(`carousel-content`);
+
+        const albumName = document.createElement(`div`);
+        albumName.classList.add(`album-name`);
+        albumName.textContent = `${album.artist} - ${album.album}`;
+
+        const reviewPara = document.createElement(`p`);
+        reviewPara.innerHTML = `<strong>Review:</strong> ${album.review.content}`;
+
+        const sourcePara = document.createElement(`p`);
+        sourcePara.innerHTML = `<strong>Source:</strong> <a href="${album.review.url}" target="_blank">${album.review.source}</a>`;
+
+        const visitLink = document.createElement(`p`);
+        const visitAnchor = document.createElement(`a`);
+        visitAnchor.href = album.url;
+        visitAnchor.target = "_blank";
+        visitAnchor.textContent = "Visit Artist";
+        visitLink.appendChild(visitAnchor);
+
+        // Append elements to carouselContent
+        carouselContent.appendChild(albumName);
+        carouselContent.appendChild(reviewPara);
+        carouselContent.appendChild(sourcePara);
+        carouselContent.appendChild(visitLink);
+
+        // Append carouselImage and carouselContent to carouselItem
+        carouselItem.appendChild(carouselImage);
+        carouselItem.appendChild(carouselContent);
+
+        // Finally, append the carouselItem to the carouselSlides container
         carouselSlides.appendChild(carouselItem);
     });
 
