@@ -1,29 +1,32 @@
+/* Global Body Styles */
 body {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 300;
-  font-size: 16px;
-  line-height: 1.4;
+  font-family: 'Open Sans', sans-serif; /* Use Open Sans font */
+  font-weight: 300; /* Use only 300 weight for body text */
+  font-size: 16px; /* Default font size */
+  line-height: 1.4; /* Set leading (line height) to 1.4 (140%) */
   padding: 0;
   box-sizing: border-box;
   text-align: center;
 }
 
+/* Heading Style */
 h1 {
-  font-size: 2rem;
-  line-height: 1.1875;
-  font-weight: 600;
+  font-size: 2rem; /* Font size of 2rem for h1 */
+  line-height: 1.1875; /* Set the line height for h1 */
+  font-weight: 600; /* Use 600 weight for h1 */
   text-align: center;
   margin: 20px 0;
 }
 
+/* General Heading Style for other elements */
 .heading-style {
   font-size: 1rem;
   line-height: 1.1875;
   font-weight: 600;
   text-align: center;
-
 }
 
+/* Carousel container style */
 .carousel {
   display: flex;
   flex-direction: column;
@@ -32,16 +35,16 @@ h1 {
 }
 
 .carousel-navigation {
+  position: absolute;
   display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 640px;
   margin-bottom: 10px;
+  top: 50%;
+  transform: translateY(-50%); /* Vertically center the navigation */
 }
 
-.carousel-navigation a {
-  text-decoration: none;
-}
 
 .carousel-slides {
   display: flex;
@@ -52,21 +55,43 @@ h1 {
 }
 
 .carousel-item {
-  flex-shrink: 0; /* Prevent shrinking */
-  width: 640px; /* Fixed width for each item */
-  padding: 0 20px; /* Padding for spacing */
-  display: flex; /* Flexbox for content alignment */
-  flex-direction: column; /* Stack content vertically */
-  align-items: center; /* Center align content */
-  text-align: center; /* Center text */
-  margin: 10px; /* Add some margin for spacing */
+  flex-shrink: 0;
+  width: 640px;
+  padding: 0 20px;
+  display: flex;;
 }
 
+/* Left-aligned text style */
 .left-align {
   text-align: left;
-  margin-left: 20px; /* You can adjust the margin as needed */
+  margin-left: 20px;
 }
 
 .no-underline {
   text-decoration: none;
+}
+
+/* Carousel image styling */
+.carousel-image {
+  position: relative; /* Make sure arrows are positioned relative to the image */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.carousel-navigation {
+  position: relative;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  transform: translateY(-50%);
+  width: 100%;
+  pointer-events: auto;
+}
+
+.carousel-navigation a {
+  pointer-events: auto; /* Allow clicks on the arrows */
+  border-radius: 50%;
+  padding: 10px;
 }
