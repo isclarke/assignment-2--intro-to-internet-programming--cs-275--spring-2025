@@ -29,12 +29,9 @@ const initCarousel = async () => {
             carouselImage.classList.add(`carousel-image`);
 
             const img = document.createElement(`img`);
-
             img.src= album.cover_image.path;
             img.width = album.cover_image.width;
-            img.height = album.cover_image.height;
-
-            carouselImage.appendChild(img);
+            img.height = album.cover_image.height; carouselImage.appendChild(img);
 
             // Create and append the carousel content
             const carouselContent = document.createElement(`div`);
@@ -87,7 +84,6 @@ const initCarousel = async () => {
             creditAnchor.classList.add(`no-underline`);
 
 
-            // Append elements to carouselContent
             carouselItem.appendChild(albumTitle);
             carouselItem.appendChild(visitLink);
             carouselContent.appendChild(creditLink);
