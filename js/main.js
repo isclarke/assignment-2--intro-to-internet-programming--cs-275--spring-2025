@@ -14,7 +14,7 @@ const initCarousel = async () => {
     const albums = await fetchData();
     if (albums) {
         const carouselSlides = document.querySelector(`.carousel-slides`);
-        let index = 0; // Track the current slide
+        let index = 0;
 
         // Populate carousel with albums
         albums.forEach((album, i) => {
