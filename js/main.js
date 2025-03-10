@@ -60,6 +60,15 @@ const initCarousel = async () => {
             visitAnchor.textContent = `${album.artist}`;
             visitLink.appendChild(visitAnchor);
 
+            const creditLink = document.createElement(`header`);
+            creditLink.textContent = `Credit: `;
+            const creditAnchor = document.createElement(`a`);
+            creditAnchor.href = album.cover_image.url;
+            creditAnchor.target = `_blank`;
+            creditAnchor.textContent = album.cover_image.credit;
+            creditLink.appendChild(creditAnchor);
+
+
             // Append elements to carouselContent
             carouselItem.appendChild(albumTitle);
             carouselItem.appendChild(visitLink);
@@ -67,6 +76,7 @@ const initCarousel = async () => {
             carouselItem.appendChild(carouselContent);
             carouselContent.appendChild(reviewPara);
             carouselContent.appendChild(sourcePara);
+            carouselContent.appendChild(creditLink);
 
             // Add the complete carousel item to the carousel slides container
             carouselSlides.appendChild(carouselItem);
