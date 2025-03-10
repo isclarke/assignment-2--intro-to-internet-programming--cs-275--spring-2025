@@ -5,6 +5,7 @@ body {
   line-height: 1.4;
   padding: 0;
   box-sizing: border-box;
+  text-align: center;
 }
 
 h1 {
@@ -51,4 +52,9 @@ h1 {
   align-items: center; /* Center align content */
   text-align: center; /* Center text */
   margin: 10px; /* Add some margin for spacing */
+}
+
+.left-align {
+  text-align: left;
+  margin-left: 20px; /* You can adjust the margin as needed */
 }

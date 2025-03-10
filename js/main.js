@@ -52,7 +52,8 @@ const initCarousel = async () => {
             reviewPara.innerHTML = `<strong>Review:</strong> ${album.review.content}`;
 
             const sourcePara = document.createElement(`p`);
-            sourcePara.innerHTML = `<strong>Source:</strong> <a href="${album.review.url}"
+            sourcePara.classList.add(`left-align`);
+            sourcePara.innerHTML = `<strong>-</strong> <a href="${album.review.url}"
             target="_blank">${album.review.source}</a>`;
 
             const visitLink = document.createElement(`p`);
@@ -84,7 +85,7 @@ const initCarousel = async () => {
             });
         };
 
-        // Navigation controls
+        // Nav's
         const prevBtn = document.querySelector(`.carousel-navigation a:first-child`);
         const nextBtn = document.querySelector(`.carousel-navigation a:last-child`);
 
@@ -100,9 +101,8 @@ const initCarousel = async () => {
             updateSlide();
         });
 
-        updateSlide(); // Set initial slide
+        updateSlide();
     }
 };
 
-// Call the initialization function
 initCarousel();
