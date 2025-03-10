@@ -12,28 +12,54 @@ h1 {
   font-size: 2rem;
   line-height: 1.1875;
   font-weight: 600;
+  text-align: center; /* Center the header */
+  margin: 20px 0; /* Add some margin for spacing */
 }
 
-.carousel-container {
+.carousel {
   display: flex;
-  overflow: hidden;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+  flex-direction: column; /* Stack navigation and slides vertically */
+  align-items: center; /* Center align items */
+  margin: 20px; /* Add some margin around the carousel */
+}
+
+.carousel-navigation {
+  display: flex;
+  justify-content: space-between; /* Space out navigation buttons */
+  width: 100%; /* Full width for navigation */
+  max-width: 640px; /* Limit width to match carousel */
+  margin-bottom: 10px; /* Space between navigation and slides */
+}
+
+.carousel-navigation a {
+  text-decoration: none; /* Remove underline from links */
+}
+
+.carousel-slides {
+  display: flex; /* Use flexbox for slides */
+  overflow: hidden; /* Hide overflow */
+  width: 100%; /* Full width for slides */
+  justify-content: center; /* Center slides */
+  position: relative; /* Position relative for absolute children */
+}
+
+.carousel-item {
+  flex-shrink: 0; /* Prevent shrinking */
+  width: 640px; /* Fixed width for each item */
+  padding: 0 20px; /* Padding for spacing */
+  display: flex; /* Flexbox for content alignment */
+  flex-direction: column; /* Stack content vertically */
+  align-items: center; /* Center align content */
+  text-align: center; /* Center text */
+}
+
+.carousel-item img {
+  max-width: 100%; /* Responsive images */
+  height: auto; /* Maintain aspect ratio */
 }
 
 .carousel-slide p {
-  text-align: center;
-  margin: 0;
-  font-weight: 300;
-}
-
-.carousel-slide {
-  flex-shrink: 0;
-  width: 640px;
-  padding: 0 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center; /* Center text in slides */
+  margin: 0; /* Remove default margin */
+  font-weight: 300; /* Light font weight */
 }
