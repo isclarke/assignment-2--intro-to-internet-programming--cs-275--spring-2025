@@ -19,7 +19,7 @@ let createDirs = (done) => {
 };
 
 let lintCSS = () => {
-    return gulp.src(`styles/**/*.css`) // Updated to match the correct directory
+    return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
         }));
@@ -28,13 +28,13 @@ let lintCSS = () => {
 let scripts = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
-        .pipe(uglify()) // Minify JavaScript
+        .pipe(uglify()) // compress JS
         .pipe(gulp.dest(`prod/js`));
 };
 
 let styles = () => {
-    return gulp.src(`styles/**/*.css`) // Match all CSS files in the styles folder
-        .pipe(cleanCSS()) // Minify CSS
+    return gulp.src(`styles/**/*.css`)
+        .pipe(cleanCSS()) // compress CSS
         .pipe(gulp.dest(`prod/css`));
 };
 
@@ -59,7 +59,7 @@ let copyAssets = () => {
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
-    gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles)); // Updated to match the correct directory
+    gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles));
     gulp.watch(`index.html`, gulp.series(html));
 };
 
