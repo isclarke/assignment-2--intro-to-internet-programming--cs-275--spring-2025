@@ -59,6 +59,8 @@ const initCarousel = async () => {
             visitAnchor.target = `_blank`;
             visitAnchor.textContent = `${album.artist}`;
             visitLink.appendChild(visitAnchor);
+            visitAnchor.classList.add(`no-underline`);
+
 
             const creditLink = document.createElement(`header`);
             creditLink.textContent = `Credit: `;
