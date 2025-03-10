@@ -61,22 +61,18 @@ const initCarousel = async () => {
             visitLink.appendChild(visitAnchor);
 
             // Append elements to carouselContent
-            carouselContent.appendChild(albumTitle);
-            carouselContent.appendChild(reviewPara);
-            carouselContent.appendChild(sourcePara);
-            carouselContent.appendChild(visitLink);
-
-            // Append carouselImage and carouselContent to carouselItem
             carouselItem.appendChild(albumTitle);
             carouselItem.appendChild(visitLink);
             carouselItem.appendChild(carouselImage);
             carouselItem.appendChild(carouselContent);
+            carouselContent.appendChild(reviewPara);
+            carouselContent.appendChild(sourcePara);
 
-
+            // Add the complete carousel item to the carousel slides container
             carouselSlides.appendChild(carouselItem);
+
         });
 
-        // Function to update active slide
         const updateSlide = () => {
             const items = document.querySelectorAll(`.carousel-item`);
             items.forEach((item, i) => {
