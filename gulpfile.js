@@ -9,7 +9,7 @@ const htmlclean = require(`gulp-htmlclean`);
 const connect = require(`gulp-connect`);
 const fs = require(`fs`);
 
-// Create directories for production build
+
 let createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`];
     dirs.forEach(dir => {
@@ -20,7 +20,6 @@ let createDirs = (done) => {
     done();
 };
 
-// Lint and compress CSS files
 let lintCSS = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
@@ -28,7 +27,6 @@ let lintCSS = () => {
         }));
 };
 
-// Transpile and minify JS files
 let scripts = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
@@ -36,7 +34,6 @@ let scripts = () => {
         .pipe(gulp.dest(`prod/js`));
 };
 
-// Minify CSS files
 let styles = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS()) // Minify CSS
@@ -85,10 +82,11 @@ let buildProd = gulp.series(
     html,
     scripts,
     styles,
-    gulp.parallel(copyAssets, cleanAndCopyData)
+    gulp.parallel(cleanAndCopyData , copyAssets)
 );
 
 // Export tasks
+exports.copyAssets = gulp.series(copyAssets);
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.build = gulp.series(buildProd);
 exports.default = gulp.series(exports.lint, watchFiles);
