@@ -45,10 +45,6 @@ const initCarousel = async () => {
             albumTitle.classList.add(`album`);
             albumTitle.textContent = `${album.album}`;
 
-            const albumName = document.createElement(`header`);
-            albumName.classList.add(`album-name`);
-            albumName.textContent = `${album.artist}`;
-
             const reviewPara = document.createElement(`p`);
             reviewPara.innerHTML = `<strong>Review:</strong> ${album.review.content}`;
 
@@ -57,7 +53,7 @@ const initCarousel = async () => {
             sourcePara.innerHTML = `<strong>-</strong> <a href="${album.review.url}"
             target="_blank">${album.review.source}</a>`;
 
-            const visitLink = document.createElement(`p`);
+            const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
             visitAnchor.href = album.url;
             visitAnchor.target = `_blank`;
@@ -65,7 +61,6 @@ const initCarousel = async () => {
             visitLink.appendChild(visitAnchor);
 
             // Append elements to carouselContent
-            carouselContent.appendChild(albumName);
             carouselContent.appendChild(albumTitle);
             carouselContent.appendChild(reviewPara);
             carouselContent.appendChild(sourcePara);
@@ -73,7 +68,7 @@ const initCarousel = async () => {
 
             // Append carouselImage and carouselContent to carouselItem
             carouselItem.appendChild(albumTitle);
-            carouselItem.appendChild(albumName);
+            carouselItem.appendChild(visitLink);
             carouselItem.appendChild(carouselImage);
             carouselItem.appendChild(carouselContent);
 
