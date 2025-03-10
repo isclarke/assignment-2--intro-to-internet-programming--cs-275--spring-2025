@@ -41,7 +41,7 @@ const initCarousel = async () => {
             const albumTitle = document.createElement(`div`);
             albumTitle.classList.add(`album`);
             albumTitle.textContent = `${album.album}`;
-            albumTitle.classList.add(`heading-style`);
+            albumTitle.classList.add(`heading-style2`);
 
             const reviewPara = document.createElement(`p`);
             const strongText = document.createElement(`strong`);
@@ -72,6 +72,7 @@ const initCarousel = async () => {
             visitLink.appendChild(visitAnchor);
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
+
 
 
             const creditLink = document.createElement(`header`);
