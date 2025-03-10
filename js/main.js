@@ -46,13 +46,14 @@ const createCarousel = (albums) => {
         reviewPara.innerHTML = `<strong>Review:</strong> ${album.review.content}`;
 
         const sourcePara = document.createElement(`p`);
-        sourcePara.innerHTML = `<strong>Source:</strong> <a href="${album.review.url}" target="_blank">${album.review.source}</a>`;
+        sourcePara.innerHTML = `<strong>Source:</strong> <a href="${album.review.url}"
+         target="_blank">${album.review.source}</a>`;
 
         const visitLink = document.createElement(`p`);
         const visitAnchor = document.createElement(`a`);
         visitAnchor.href = album.url;
-        visitAnchor.target = "_blank";
-        visitAnchor.textContent = "Visit Artist";
+        visitAnchor.target = `_blank`;
+        visitAnchor.textContent = `Visit Artist`;
         visitLink.appendChild(visitAnchor);
 
         // Append elements to carouselContent
