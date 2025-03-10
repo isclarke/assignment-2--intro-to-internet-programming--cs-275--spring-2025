@@ -2,16 +2,16 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 300;
   font-size: 16px;
-  line-height: 1.4;
+  line-height: 1.4; /* 140% leading */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 h1 {
-  font-size: 2rem;
-  line-height: 1.1875;
-  font-weight: 600;
+  font-size: 2rem; /* Font size for h1 */
+  line-height: 1.1875; /* Leading for h1 */
+  font-weight: 600; /* Bold weight for h1 */
   text-align: center; /* Center the header */
   margin: 20px 0; /* Add some margin for spacing */
 }
@@ -51,6 +51,7 @@ h1 {
   flex-direction: column; /* Stack content vertically */
   align-items: center; /* Center align content */
   text-align: center; /* Center text */
+  margin: 10px; /* Add some margin for spacing */
 }
 
 .carousel-item img {
@@ -58,8 +59,22 @@ h1 {
   height: auto; /* Maintain aspect ratio */
 }
 
-.carousel-slide p {
-  text-align: center; /* Center text in slides */
-  margin: 0; /* Remove default margin */
-  font-weight: 300; /* Light font weight */
+.carousel-item h2 {
+  font-weight: 600; /* Bold weight for album title */
+  margin: 10px 0; /* Margin for spacing */
+}
+
+.carousel-item p {
+  font-weight: 300; /* Light font weight for review content */
+  margin: 10px 0; /* Margin for spacing */
+}
+
+.carousel-item a {
+  color: #007BFF; /* Link color */
+  text-decoration: none; /* Remove underline */
+  margin: 5px 0; /* Margin for spacing */
+}
+
+.carousel-item a:hover {
+  text-decoration: underline; /* Underline on hover */
 }
