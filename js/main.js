@@ -34,7 +34,7 @@ const initCarousel = async () => {
             console.log(album.cover_image.path);  // Log the image path to check
 
             img.src = album.cover_image.path;
-            img.alt = album.cover_image.alt_content;
+            img.alt = album.cover_image.alt_content;  // Ensure this is the alt content, not visible text
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
 
@@ -60,7 +60,7 @@ const initCarousel = async () => {
             const visitAnchor = document.createElement(`a`);
             visitAnchor.href = album.url;
             visitAnchor.target = `_blank`;
-            visitAnchor.textContent = `Visit Artist`;
+            visitAnchor.textContent = `${album.artist}`;
             visitLink.appendChild(visitAnchor);
 
             // Append elements to carouselContent
