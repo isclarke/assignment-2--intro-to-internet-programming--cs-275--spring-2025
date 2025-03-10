@@ -30,9 +30,6 @@ const initCarousel = async () => {
 
             const img = document.createElement(`img`);
 
-            // Debugging: Log the image path
-            console.log(album.cover_image.path);  // Log the image path to check
-
             img.src= album.cover_image.path;
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
@@ -43,13 +40,14 @@ const initCarousel = async () => {
             const carouselContent = document.createElement(`div`);
             carouselContent.classList.add(`carousel-content`);
 
-            const albumName = document.createElement(`div`);
-            albumName.classList.add(`album-name`);
-            albumName.textContent = `${album.artist}`;
 
-            const albumTitle = document.createElement(`header`);
+            const albumTitle = document.createElement(`div`);
             albumTitle.classList.add(`album`);
             albumTitle.textContent = `${album.album}`;
+
+            const albumName = document.createElement(`header`);
+            albumName.classList.add(`album-name`);
+            albumName.textContent = `${album.artist}`;
 
             const reviewPara = document.createElement(`p`);
             reviewPara.innerHTML = `<strong>Review:</strong> ${album.review.content}`;
@@ -74,10 +72,12 @@ const initCarousel = async () => {
             carouselContent.appendChild(visitLink);
 
             // Append carouselImage and carouselContent to carouselItem
+            carouselItem.appendChild(albumTitle);
+            carouselItem.appendChild(albumName);
             carouselItem.appendChild(carouselImage);
             carouselItem.appendChild(carouselContent);
 
-            // Finally, append the carouselItem to the carouselSlides container
+
             carouselSlides.appendChild(carouselItem);
         });
 
