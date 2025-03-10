@@ -47,12 +47,25 @@ const initCarousel = async () => {
             albumTitle.classList.add(`heading-style`);
 
             const reviewPara = document.createElement(`p`);
-            reviewPara.innerHTML = `<strong>Review:</strong> ${album.review.content}`;
+            const strongText = document.createElement(`strong`);
+            strongText.textContent = `Review: `;
+            reviewPara.appendChild(strongText);
+            reviewPara.appendChild(document.createTextNode(album.review.content));
+
 
             const sourcePara = document.createElement(`p`);
             sourcePara.classList.add(`left-align`);
-            sourcePara.innerHTML = `<strong>-</strong> <a href="${album.review.url}"
-            target="_blank">${album.review.source}</a>`;
+            const dash = document.createElement(`strong`);
+            dash.textContent = `- `;
+            const sourceLink = document.createElement(`a`);
+            sourceLink.href = album.review.url;
+            sourceLink.target = `_blank`;
+            sourceLink.textContent = album.review.source;
+            sourcePara.appendChild(dash);
+            sourcePara.appendChild(sourceLink);
+            sourceLink.classList.add(`no-underline`);
+
+
 
             const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
@@ -71,6 +84,7 @@ const initCarousel = async () => {
             creditAnchor.target = `_blank`;
             creditAnchor.textContent = album.cover_image.credit;
             creditLink.appendChild(creditAnchor);
+            creditAnchor.classList.add(`no-underline`);
 
 
             // Append elements to carouselContent
