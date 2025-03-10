@@ -91,11 +91,7 @@ const initCarousel = async () => {
             carouselItem.appendChild(carouselImage);
             carouselItem.appendChild(carouselContent);
             carouselContent.appendChild(reviewPara);
-            carouselContent.appendChild(sourcePara);
-
-
-            // Add the complete carousel item to the carousel slides container
-            carouselSlides.appendChild(carouselItem);
+            carouselContent.appendChild(sourcePara); carouselSlides.appendChild(carouselItem);
 
         });
 
