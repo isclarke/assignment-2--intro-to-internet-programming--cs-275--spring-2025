@@ -20,14 +20,14 @@ let createDirs = (done) => {
 };
 
 let lintCSS = () => {
-    return gulp.src(`src/css/**/*.css`)
+    return gulp.src(`css/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
         }));
 };
 
 let scripts = () => {
-    return gulp.src(`src/js/**/*.js`)
+    return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
         .pipe(uglify()) // Minify JavaScript
         .pipe(gulp.dest(`prod/js`));
@@ -46,21 +46,21 @@ let html = () => {
 };
 
 let lintJS = () => {
-    return gulp.src(`src/js/**/*.js`)
+    return gulp.src(`js/**/*.js`)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 };
 
 let copyAssets = () => {
-    return gulp.src(`src/img/**/*`)
+    return gulp.src(`img/**/*`)
         .pipe(gulp.dest(`prod/img`));
 };
 
 let watchFiles = () => {
     connect.server({ livereload: true });
-    gulp.watch(`src/js/**/*.js`, gulp.series(lintJS, scripts));
-    gulp.watch(`src/css/**/*.css`, gulp.series(lintCSS, styles));
+    gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
+    gulp.watch(`css/**/*.css`, gulp.series(lintCSS, styles));
     gulp.watch(`index.html`, gulp.series(html));
 };
 
