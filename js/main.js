@@ -1,7 +1,7 @@
 // Fetch the data from data.json
 const fetchData = async () => {
     try {
-        const response = await fetch(`json/data.json`);
+        const response = await fetch(`json/data.json`);  // Ensure this is correct for your setup
         const data = await response.json();
         return data; // Return the entire data object
     } catch (error) {
@@ -20,14 +20,18 @@ const createCarousel = (albums) => {
         carouselItem.className = `carousel-item ${i === 0 ? `active` : ``}`;
 
         carouselItem.innerHTML = `
-            <img src="${album.cover_image.path}"
-                 alt="${album.cover_image.alt_content}"
-                 width="${album.cover_image.width}"
-                 height="${album.cover_image.height}">
-            <h2>${album.artist} - ${album.album}</h2>
-            <p>${album.review.content}</p>
-            <a href="${album.url}" target="_blank">Visit Artist</a>
-            <a href="${album.review.url}" target="_blank">Read Review</a>
+            <div class="carousel-image">
+                <img src="${album.cover_image.path}"
+                     alt="${album.cover_image.alt_content}"
+                     width="${album.cover_image.width}"
+                     height="${album.cover_image.height}">
+            </div>
+            <div class="carousel-content">
+                <div class="album-name">${album.artist} - ${album.album}</div>
+                <p><strong>Review:</strong> ${album.review.content}</p>
+                <p><strong>Source:</strong> <a href="${album.review.url}" target="_blank">${album.review.source}</a></p>
+                <p><a href="${album.url}" target="_blank">Visit Artist</a></p>
+            </div>
         `;
 
         carouselSlides.appendChild(carouselItem);
