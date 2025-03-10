@@ -8,9 +8,8 @@ const htmlclean = require(`gulp-htmlclean`);
 const connect = require(`gulp-connect`);
 const fs = require(`fs`);
 
-
 let createDirs = (done) => {
-    const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html` ];
+    const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`];
     dirs.forEach(dir => {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
@@ -20,7 +19,7 @@ let createDirs = (done) => {
 };
 
 let lintCSS = () => {
-    return gulp.src(`css/**/*.css`)
+    return gulp.src(`styles/**/*.css`) // Updated to match the correct directory
         .pipe(stylelint({
             failAfterError: false,
         }));
@@ -60,7 +59,7 @@ let copyAssets = () => {
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
-    gulp.watch(`css/**/*.css`, gulp.series(lintCSS, styles));
+    gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles)); // Updated to match the correct directory
     gulp.watch(`index.html`, gulp.series(html));
 };
 
