@@ -9,7 +9,7 @@ const connect = require(`gulp-connect`);
 const fs = require(`fs`);
 
 let createDirs = (done) => {
-    const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`];
+    const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html` ,`prod/data` ];
     dirs.forEach(dir => {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
@@ -56,11 +56,18 @@ let copyAssets = () => {
         .pipe(gulp.dest(`prod/img`));
 };
 
+let copyData = () => {
+    return gulp.src(`json/data.json`)
+        .pipe(gulp.dest(`prod/data`));
+};
+
+
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles));
     gulp.watch(`index.html`, gulp.series(html));
+    gulp.watch(`data.json`, gulp.series(copyData));
 };
 
 let buildProd = gulp.series(
@@ -68,7 +75,7 @@ let buildProd = gulp.series(
     html,
     scripts,
     styles,
-    gulp.parallel(copyAssets)
+    gulp.parallel(copyAssets, copyData)
 );
 
 exports.lint = gulp.parallel(lintJS, lintCSS);
