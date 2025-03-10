@@ -33,8 +33,7 @@ const initCarousel = async () => {
             // Debugging: Log the image path
             console.log(album.cover_image.path);  // Log the image path to check
 
-            img.src = album.cover_image.path;
-            img.alt = album.cover_image.alt_content;  // Ensure this is the alt content, not visible text
+            img.src= album.cover_image.path;
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
 
