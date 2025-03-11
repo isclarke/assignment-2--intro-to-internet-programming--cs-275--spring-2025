@@ -5,13 +5,12 @@ const cleanCSS = require(`gulp-clean-css`);
 const uglify = require(`gulp-uglify`);
 const jsonTransform = require(`gulp-json-transform`);
 const babel = require(`gulp-babel`);
-const htmlclean = require(`gulp-htmlclean`);
 const connect = require(`gulp-connect`);
 const fs = require(`fs`);
 
-let createDirs = (done) => {
+const createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`];
-    dirs.forEach(dir => {
+    dirs.forEach((dir) => {
         if (!fs.existsSync(dir)) {
             fs.mkdirSync(dir, { recursive: true });
         }
@@ -19,74 +18,52 @@ let createDirs = (done) => {
     done();
 };
 
-let lintCSS = () => {
+const lintCSS = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
+            reporters: [{ formatter: `string`, console: true }],
         }));
 };
 
-let scripts = () => {
-    return gulp.src(`js/**/*.js`)
-        .pipe(babel({ presets: [`@babel/preset-env`] }))
-        .pipe(uglify()) // Minify JS
-        .pipe(gulp.dest(`prod/js`));
-};
-
-let styles = () => {
-    return gulp.src(`styles/**/*.css`)
-        .pipe(cleanCSS()) // Minify CSS
-        .pipe(gulp.dest(`prod/css`));
-};
-
-let html = () => {
-    return gulp.src(`index.html`)
-        .pipe(htmlclean())
-        .pipe(gulp.dest(`prod/html`));
-};
-
-let lintJS = () => {
+const lintJS = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 };
 
-let copyAssets = () => {
-    return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`prod/img`));
+const scripts = () => {
+    return gulp.src(`js/**/*.js`)
+        .pipe(babel({ presets: [`@babel/preset-env`] }))
+        .pipe(uglify())
+        .pipe(gulp.dest(`prod/js`))
+        .pipe(connect.reload());
 };
 
-let cleanAndCopyData = () => {
+const styles = () => {
+    return gulp.src(`styles/**/*.css`)
+        .pipe(cleanCSS())
+        .pipe(gulp.dest(`prod/css`))
+        .pipe(connect.reload());
+};
+
+const cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
-        .pipe(jsonTransform(data => {
-            // Convert to JSONP format by wrapping in a callback function
-            return `callback(${JSON.stringify(data)});`;
-        }, 2)) // Indentation of 2 spaces
-        .pipe(gulp.dest(`prod/data`));
+        .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
+        .pipe(gulp.dest(`prod/data`))
+        .pipe(connect.reload());
 };
 
-
-let watchFiles = () => {
+const watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles));
-    gulp.watch(`index.html`, gulp.series(html));
-    gulp.watch(`data.json`, gulp.series(cleanAndCopyData));
-    gulp.watch(`img/**/*`, gulp.series(copyAssets));
+    gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData));
 };
 
-let buildProd = gulp.series(
-    createDirs,
-    html,
-    scripts,
-    styles,
-    gulp.parallel(cleanAndCopyData , copyAssets)
-);
+const buildProd = gulp.series(createDirs, scripts, styles, cleanAndCopyData);
 
-// Export tasks
-exports.copyAssets = gulp.series(copyAssets);
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.build = gulp.series(buildProd);
 exports.default = gulp.series(exports.lint, watchFiles);
-exports.cleanAndCopyData = cleanAndCopyData;
