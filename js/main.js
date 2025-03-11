@@ -36,17 +36,20 @@ const initCarousel = async () => {
             const carouselContent = document.createElement(`div`);
             carouselContent.classList.add(`carousel-content`);
 
+            //Album title
             const albumTitle = document.createElement(`div`);
             albumTitle.classList.add(`album`);
             albumTitle.textContent = `${album.album}`;
             albumTitle.classList.add(`heading-style2`);
 
+            //Album review
             const reviewPara = document.createElement(`p`);
             const strongText = document.createElement(`strong`);
             strongText.textContent = `Review: `;
             reviewPara.appendChild(strongText);
             reviewPara.appendChild(document.createTextNode(album.review.content));
 
+            //Source
             const sourcePara = document.createElement(`p`);
             sourcePara.classList.add(`left-align`);
             const dash = document.createElement(`strong`);
@@ -59,6 +62,9 @@ const initCarousel = async () => {
             sourcePara.appendChild(sourceLink);
             sourceLink.classList.add(`no-underline`);
 
+
+
+            //Artist name/visit link
             const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
             visitAnchor.href = album.url;
@@ -68,6 +74,8 @@ const initCarousel = async () => {
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
 
+
+            //Credit link and name of creditee
             const creditLink = document.createElement(`header`);
             creditLink.textContent = `Credit: `;
             const creditAnchor = document.createElement(`a`);
@@ -77,13 +85,15 @@ const initCarousel = async () => {
             creditLink.appendChild(creditAnchor);
             creditAnchor.classList.add(`no-underline`);
 
+            //Appending all items
             carouselItem.appendChild(albumTitle);
             carouselItem.appendChild(visitLink);
             carouselContent.appendChild(creditLink);
             carouselItem.appendChild(carouselImage);
             carouselItem.appendChild(carouselContent);
             carouselContent.appendChild(reviewPara);
-            carouselContent.appendChild(sourcePara); carouselSlides.appendChild(carouselItem);
+            carouselContent.appendChild(sourcePara);
+            carouselSlides.appendChild(carouselItem);
 
         });
 

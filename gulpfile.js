@@ -92,4 +92,4 @@ let buildProd = gulp.series(
 // Exports
 exports.lint = gulp.parallel(lintJS, lintCSS); // Lint JS and CSS
 exports.build = gulp.series(buildProd); // Build prod files
-exports.default = gulp.series(exports.lint, watchFiles); // Start linting and watch files when `gulp` is run
+exports.default = gulp.series(exports.lint, watchFiles);
