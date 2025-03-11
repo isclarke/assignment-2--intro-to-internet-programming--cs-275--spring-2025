@@ -1,15 +1,14 @@
 // Fetch the data from data.json
 const fetchData = async () => {
     try {
-        const response = await fetch(`json/data.json`);  // Ensure this is correct for your setup
+        const response = await fetch(`json/data.json`);
         const data = await response.json();
-        return data; // Return the entire data object
+        return data;
     } catch (error) {
         console.error(`Error fetching JSON data:`, error);
     }
 };
 
-// Initialize the carousel
 const initCarousel = async () => {
     const albums = await fetchData();
     if (albums) {
