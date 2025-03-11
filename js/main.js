@@ -45,9 +45,6 @@ const initCarousel = async () => {
 
             //Album review
             const reviewPara = document.createElement(`p`);
-            const strongText = document.createElement(`strong`);
-            strongText.textContent = `Review: `;
-            reviewPara.appendChild(strongText);
             reviewPara.appendChild(document.createTextNode(album.review.content));
 
             //Source
