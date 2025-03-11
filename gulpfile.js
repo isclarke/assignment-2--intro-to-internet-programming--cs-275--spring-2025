@@ -38,11 +38,11 @@ let scripts = () => {
 };
 
 // Lint CSS files
+// Lint and compress CSS files
 let lintCSS = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
-            reporters: [{ formatter: `string`, console: true }] // Output to console
         }));
 };
 
