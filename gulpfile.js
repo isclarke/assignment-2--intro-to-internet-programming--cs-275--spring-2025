@@ -10,6 +10,7 @@ const connect = require(`gulp-connect`);
 const fs = require(`fs`);
 
 
+
 let createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`];
     dirs.forEach(dir => {
