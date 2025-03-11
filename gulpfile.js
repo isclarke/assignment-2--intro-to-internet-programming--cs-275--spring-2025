@@ -9,6 +9,7 @@ const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
 
+//create prod directories
 let createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`];
     dirs.forEach((dir) => {
@@ -19,6 +20,7 @@ let createDirs = (done) => {
     done();
 };
 
+//lint CSS
 let lintCSS = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
@@ -27,6 +29,7 @@ let lintCSS = () => {
         }));
 };
 
+//lint JS
 let lintJS = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(eslint())
@@ -34,6 +37,7 @@ let lintJS = () => {
         .pipe(eslint.failAfterError());
 };
 
+//run babel and move to prod file
 let scripts = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
@@ -42,6 +46,7 @@ let scripts = () => {
         .pipe(connect.reload());
 };
 
+//clean CSS and move to prod file
 let styles = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
@@ -49,6 +54,7 @@ let styles = () => {
         .pipe(connect.reload());
 };
 
+//clean and copy data.json and move to prod file
 let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
         .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
@@ -56,6 +62,7 @@ let cleanAndCopyData = () => {
         .pipe(connect.reload());
 };
 
+//compress the HTMl and move to prod file
 let minifyHTML = () => {
     return gulp.src(`index.html`)
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
@@ -74,11 +81,13 @@ let watchFiles = () => {
     gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData));
 };
 
+//build prod file
 let buildProd = gulp.series(
     createDirs,
     gulp.parallel(scripts, styles, cleanAndCopyData, minifyHTML, copyAssets)
 );
 
+//exports
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.build = gulp.series(buildProd);
 exports.default = gulp.series(exports.lint, watchFiles);
