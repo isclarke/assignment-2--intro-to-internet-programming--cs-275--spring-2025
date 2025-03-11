@@ -74,7 +74,7 @@ h1 {
   position: relative;
   display: flex;
   justify-content: space-between;
-  transform: translateY(500%);
+  transform: translateY(525%);
   width: 100%;
   pointer-events: auto;
 }
