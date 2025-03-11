@@ -73,6 +73,7 @@ const initCarousel = async () => {
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
 
+
             //Credit link and name of creditee
             const creditLink = document.createElement(`header`);
             creditLink.textContent = `Credit: `;
