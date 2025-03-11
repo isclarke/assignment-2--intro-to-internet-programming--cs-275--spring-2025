@@ -36,7 +36,6 @@ const initCarousel = async () => {
             const carouselContent = document.createElement(`div`);
             carouselContent.classList.add(`carousel-content`);
 
-
             const albumTitle = document.createElement(`div`);
             albumTitle.classList.add(`album`);
             albumTitle.textContent = `${album.album}`;
@@ -47,7 +46,6 @@ const initCarousel = async () => {
             strongText.textContent = `Review: `;
             reviewPara.appendChild(strongText);
             reviewPara.appendChild(document.createTextNode(album.review.content));
-
 
             const sourcePara = document.createElement(`p`);
             sourcePara.classList.add(`left-align`);
@@ -61,8 +59,6 @@ const initCarousel = async () => {
             sourcePara.appendChild(sourceLink);
             sourceLink.classList.add(`no-underline`);
 
-
-
             const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
             visitAnchor.href = album.url;
@@ -72,8 +68,6 @@ const initCarousel = async () => {
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
 
-
-
             const creditLink = document.createElement(`header`);
             creditLink.textContent = `Credit: `;
             const creditAnchor = document.createElement(`a`);
@@ -82,7 +76,6 @@ const initCarousel = async () => {
             creditAnchor.textContent = album.cover_image.credit;
             creditLink.appendChild(creditAnchor);
             creditAnchor.classList.add(`no-underline`);
-
 
             carouselItem.appendChild(albumTitle);
             carouselItem.appendChild(visitLink);
