@@ -30,7 +30,8 @@ const initCarousel = async () => {
             const img = document.createElement(`img`);
             img.src= album.cover_image.path;
             img.width = album.cover_image.width;
-            img.height = album.cover_image.height; carouselImage.appendChild(img);
+            img.height = album.cover_image.height;
+            carouselImage.appendChild(img);
 
             // Create and append the carousel content
             const carouselContent = document.createElement(`div`);
