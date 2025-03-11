@@ -38,16 +38,13 @@ h1 {
 }
 
 .carousel-navigation {
-  position: absolute;
-  display: flex;
   justify-content: space-between;
   width: 100%;
   max-width: 640px;
-  top: 50%;
 }
 
+
 .carousel-item {
-  flex-shrink: 0;
   width: 640px;
   padding-left: 20px;
   padding-right: 20px;
