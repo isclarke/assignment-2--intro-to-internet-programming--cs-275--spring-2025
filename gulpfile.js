@@ -9,7 +9,7 @@ const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
 
-const createDirs = (done) => {
+let createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`];
     dirs.forEach((dir) => {
         if (!fs.existsSync(dir)) {
@@ -19,7 +19,7 @@ const createDirs = (done) => {
     done();
 };
 
-const lintCSS = () => {
+let lintCSS = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
@@ -27,14 +27,14 @@ const lintCSS = () => {
         }));
 };
 
-const lintJS = () => {
+let lintJS = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 };
 
-const scripts = () => {
+let scripts = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
         .pipe(uglify())
@@ -42,39 +42,39 @@ const scripts = () => {
         .pipe(connect.reload());
 };
 
-const styles = () => {
+let styles = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
         .pipe(gulp.dest(`prod/css`))
         .pipe(connect.reload());
 };
 
-const cleanAndCopyData = () => {
+let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
         .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
         .pipe(gulp.dest(`prod/data`))
         .pipe(connect.reload());
 };
 
-const minifyHTML = () => {
+let minifyHTML = () => {
     return gulp.src(`index.html`)
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(`prod/html`));
 };
 
-const copyAssets = () => {
+let copyAssets = () => {
     return gulp.src(`img/**/*`)
         .pipe(gulp.dest(`prod/img`));
 };
 
-const watchFiles = () => {
+let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles));
     gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData));
 };
 
-const buildProd = gulp.series(
+let buildProd = gulp.series(
     createDirs,
     gulp.parallel(scripts, styles, cleanAndCopyData, minifyHTML, copyAssets)
 );
