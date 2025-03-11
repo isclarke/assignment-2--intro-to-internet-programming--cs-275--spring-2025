@@ -25,9 +25,10 @@ let lintCSS = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
-            reporters: [{ formatter: `string`, console: true }],
+            reporters: [{ console: true }]
         }));
 };
+
 
 //lint JS
 let lintJS = () => {
