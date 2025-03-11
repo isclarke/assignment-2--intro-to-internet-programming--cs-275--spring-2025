@@ -6,6 +6,7 @@ const uglify = require(`gulp-uglify`);
 const jsonTransform = require(`gulp-json-transform`);
 const babel = require(`gulp-babel`);
 const connect = require(`gulp-connect`);
+const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
 
 const createDirs = (done) => {
@@ -55,6 +56,17 @@ const cleanAndCopyData = () => {
         .pipe(connect.reload());
 };
 
+const minifyHTML = () => {
+    return gulp.src(`index.html`)
+        .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+        .pipe(gulp.dest(`prod/html`));
+};
+
+const copyAssets = () => {
+    return gulp.src(`img/**/*`)
+        .pipe(gulp.dest(`prod/img`));
+};
+
 const watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts));
@@ -62,7 +74,10 @@ const watchFiles = () => {
     gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData));
 };
 
-const buildProd = gulp.series(createDirs, scripts, styles, cleanAndCopyData);
+const buildProd = gulp.series(
+    createDirs,
+    gulp.parallel(scripts, styles, cleanAndCopyData, minifyHTML, copyAssets)
+);
 
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.build = gulp.series(buildProd);
