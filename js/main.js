@@ -63,8 +63,6 @@ const initCarousel = async () => {
             sourcePara.appendChild(sourceLink);
             sourceLink.classList.add(`no-underline`);
 
-
-
             //Artist name/visit link
             const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
@@ -74,7 +72,6 @@ const initCarousel = async () => {
             visitLink.appendChild(visitAnchor);
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
-
 
             //Credit link and name of creditee
             const creditLink = document.createElement(`header`);
