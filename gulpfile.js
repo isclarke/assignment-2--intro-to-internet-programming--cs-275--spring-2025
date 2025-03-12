@@ -9,7 +9,7 @@ const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
 
-// Create prod directories
+// Create production folder
 let createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`];
     dirs.forEach((dir) => {
@@ -22,42 +22,34 @@ let createDirs = (done) => {
 
 // Lint JS files
 let lintJS = () => {
-    return gulp.src(`js/**/*.js`)
+    return gulp.src(`dev/js/**/*.js`)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 };
 
-// Transpile JS files to ES5 and minify
-let scripts = () => {
-    return gulp.src(`js/**/*.js`)
-        .pipe(babel({ presets: [`@babel/preset-env`] })) // Transpiles to ES5
-        .pipe(uglify()) // Minify
+// Transpile JS files to ES5 and compress
+let transpileJSForDev = () => {
+    return gulp.src(`dev/js/**/*.js`)
+        .pipe(babel({ presets: [`@babel/preset-env`] }))
+        .pipe(uglify())
         .pipe(gulp.dest(`prod/js`))
-        .pipe(connect.reload()); // Browser reload
+        .pipe(connect.reload());
 };
 
 // Lint CSS files
-// Lint and compress CSS files
 let lintCSS = () => {
-    return gulp.src(`styles/**/*.css`)
+    return gulp.src(`dev/styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
         }));
 };
 
-// Clean and minify CSS and move to prod file
-let styles = () => {
-    return gulp.src(`styles/**/*.css`)
-        .pipe(cleanCSS()) // Minify CSS
+let compileCSSForDev = () => {
+    return gulp.src(`dev/styles/**/*.css`)
+        .pipe(cleanCSS())
         .pipe(gulp.dest(`prod/css`))
-        .pipe(connect.reload()); // Browser reload
-};
-
-// Copy assets like images
-let copyAssets = () => {
-    return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`prod/img`));
+        .pipe(connect.reload());
 };
 
 // Clean and copy data.json to prod file
@@ -70,7 +62,7 @@ let cleanAndCopyData = () => {
 
 // Minify HTML and move to prod file
 let minifyHTML = () => {
-    return gulp.src(`index.html`)
+    return gulp.src(`dev/html/**/*.html`) // Changed to dev folder
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(`prod/html`));
 };
@@ -78,20 +70,22 @@ let minifyHTML = () => {
 // Watch files for changes
 let watchFiles = () => {
     connect.server({ livereload: true });
-    gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts)); // Lint JS, then transpile/minify
-    gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles)); // Lint CSS, then minify
-    gulp.watch(`img/**/*`, gulp.series(copyAssets));
-    gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData)); // Watch data.json
 
+    gulp.watch(`dev/js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
+    gulp.watch(`dev/styles/**/*.css`, compileCSSForDev);
+    gulp.watch(`dev/html/**/*.html`, minifyHTML);
+    gulp.watch(`dev/img/**/*`).on(`change`, connect.reload);
+
+    gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData));
 };
 
 // Build prod files
 let buildProd = gulp.series(
     createDirs,
-    gulp.parallel(scripts, styles, cleanAndCopyData, minifyHTML, copyAssets)
+    gulp.parallel(transpileJSForDev, compileCSSForDev, cleanAndCopyData, minifyHTML)
 );
 
 // Exports
-exports.lint = gulp.parallel(lintJS, lintCSS); // Lint JS and CSS
-exports.build = gulp.series(buildProd); // Build prod files
+exports.lint = gulp.parallel(lintJS, lintCSS);
+exports.build = gulp.series(buildProd);
 exports.default = gulp.series(exports.lint, watchFiles);

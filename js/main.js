@@ -14,7 +14,7 @@ const initCarousel = async () => {
         const carouselSlides = document.querySelector(`.carousel-slides`);
         let index = 0;
 
-        // Populate carousel with albums
+        //Add albums to carousel items
         albums.forEach((album, i) => {
             const carouselItem = document.createElement(`div`);
             carouselItem.classList.add(`carousel-item`);
@@ -22,23 +22,23 @@ const initCarousel = async () => {
                 carouselItem.classList.add(`active`);
             }
 
-            // Create and append the carousel image
+            // Create and add the images to the caroseul
             const carouselImage = document.createElement(`div`);
             carouselImage.classList.add(`carousel-image`);
 
             const img = document.createElement(`img`);
             let imgPath = album.cover_image.path;
 
-            // Remove underscores from the path if necessary
+            //Underscores in path kept messing up load
             imgPath = imgPath.replace(/_/g, ``);
 
-            // Ensure the path is correct
-            img.src = imgPath; // Assuming the path is correct after modification
+            img.src = imgPath;
+            //read width and height from data.json
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
             carouselImage.appendChild(img);
 
-            // Create and append the carousel content
+            // Create and add carosel content
             const carouselContent = document.createElement(`div`);
             carouselContent.classList.add(`carousel-content`);
 
@@ -96,6 +96,7 @@ const initCarousel = async () => {
             carouselSlides.appendChild(carouselItem);
         });
 
+        //Update slides, only show one image at a time
         const updateSlide = () => {
             const items = document.querySelectorAll(`.carousel-item`);
             items.forEach((item, i) => {
@@ -123,4 +124,5 @@ const initCarousel = async () => {
     }
 };
 
+//Call the function
 initCarousel();
