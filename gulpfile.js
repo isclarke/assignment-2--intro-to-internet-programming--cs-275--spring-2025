@@ -22,42 +22,47 @@ let createDirs = (done) => {
 
 // Lint JS files
 let lintJS = () => {
-    return gulp.src(`dev/js/**/*.js`)
+    return gulp.src(`js/**/*.js`)
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
 };
 
-// Transpile JS files to ES5 and compress
-let transpileJSForDev = () => {
-    return gulp.src(`js/main.js`)
-        .pipe(babel({ presets: [`@babel/preset-env`] }))
-        .pipe(uglify())
-        .pipe(gulp.dest(`prod/js`))
-        .pipe(connect.reload());
-};
-
 // Lint CSS files
 let lintCSS = () => {
-    return gulp.src(`dev/styles/**/*.css`)
+    return gulp.src(`styles/**/*.css`)
         .pipe(stylelint({
             failAfterError: false,
         }));
 };
 
-let compileCSSForDev = () => {
+// Transpile JS files to ES5
+let transpileJSForDev = () => {
+    return gulp.src(`js/**/*.js`)
+        .pipe(babel({ presets: [`@babel/preset-env`] }))
+        .pipe(gulp.dest(`data.json/js`));
+};
+
+// Compile and minify CSS for production
+let compileCSSForProd = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
-        .pipe(gulp.dest(`prod/css`))
-        .pipe(connect.reload());
+        .pipe(gulp.dest(`prod/css`));
+};
+
+// Transpile, minify JS for production
+let transpileJSForProd = () => {
+    return gulp.src(`js/**/*.js`)
+        .pipe(babel({ presets: [`@babel/preset-env`] }))
+        .pipe(uglify())
+        .pipe(gulp.dest(`prod/js`));
 };
 
 // Clean and copy data.json to prod file
 let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
         .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
-        .pipe(gulp.dest(`prod/data`))
-        .pipe(connect.reload()); // Browser reload
+        .pipe(gulp.dest(`prod/data`));
 };
 
 // Minify HTML and move to prod file
@@ -67,22 +72,25 @@ let minifyHTML = () => {
         .pipe(gulp.dest(`prod/html`));
 };
 
+let copyImages = () => {
+    return gulp.src(`img/**/`)
+        .pipe(gulp.dest(`prod/img`));
+};
+
 // Watch files for changes
 let watchFiles = () => {
     connect.server({ livereload: true });
 
-    gulp.watch(`dev/js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
-    gulp.watch(`dev/styles/**/*.css`, compileCSSForDev);
-    gulp.watch(`dev/html/**/*.html`, minifyHTML);
-    gulp.watch(`dev/img/**/*`).on(`change`, connect.reload);
-
-    gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData));
+    gulp.watch(`js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
+    gulp.watch(`styles/**/*.css`, gulp.series(lintCSS));
+    gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
+    gulp.watch(`img/**/*`).on(`change`, connect.reload); // Reload on image changes
 };
 
 // Build prod files
 let buildProd = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForDev, compileCSSForDev, cleanAndCopyData, minifyHTML)
+    gulp.parallel(transpileJSForProd, compileCSSForProd, cleanAndCopyData, minifyHTML, copyImages)
 );
 
 // Exports
