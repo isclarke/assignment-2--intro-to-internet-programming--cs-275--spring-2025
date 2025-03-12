@@ -81,6 +81,8 @@ let watchFiles = () => {
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts)); // Lint JS, then transpile/minify
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles)); // Lint CSS, then minify
     gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData)); // Watch data.json
+    gulp.watch(`img/**/*`, gulp.series(copyAssets));
+
 };
 
 // Build prod files
