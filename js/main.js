@@ -1,4 +1,3 @@
-// Fetch the data from data.json
 const fetchData = async () => {
     try {
         const response = await fetch(`json/data.json`);
@@ -28,7 +27,13 @@ const initCarousel = async () => {
             carouselImage.classList.add(`carousel-image`);
 
             const img = document.createElement(`img`);
-            img.src = album.cover_image.path;
+            let imgPath = album.cover_image.path;
+
+            // Remove underscores from the path if necessary
+            imgPath = imgPath.replace(/_/g, ``);
+
+            // Ensure the path is correct
+            img.src = imgPath; // Assuming the path is correct after modification
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
             carouselImage.appendChild(img);
@@ -37,17 +42,17 @@ const initCarousel = async () => {
             const carouselContent = document.createElement(`div`);
             carouselContent.classList.add(`carousel-content`);
 
-            //Album title
+            // Album title
             const albumTitle = document.createElement(`div`);
             albumTitle.classList.add(`album`);
             albumTitle.textContent = `${album.album}`;
             albumTitle.classList.add(`heading-style2`);
 
-            //Album review
+            // Album review
             const reviewPara = document.createElement(`p`);
             reviewPara.appendChild(document.createTextNode(album.review.content));
 
-            //Source
+            // Source
             const sourcePara = document.createElement(`p`);
             sourcePara.classList.add(`left-align`);
             const dash = document.createElement(`strong`);
@@ -60,7 +65,7 @@ const initCarousel = async () => {
             sourcePara.appendChild(sourceLink);
             sourceLink.classList.add(`no-underline`);
 
-            //Artist name and visit link
+            // Artist name and visit link
             const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
             visitAnchor.href = album.url;
@@ -70,8 +75,7 @@ const initCarousel = async () => {
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
 
-
-            //Credit link and name of creditee
+            // Credit link and name of creditee
             const creditLink = document.createElement(`header`);
             creditLink.textContent = `Credit: `;
             const creditAnchor = document.createElement(`a`);
@@ -81,7 +85,7 @@ const initCarousel = async () => {
             creditLink.appendChild(creditAnchor);
             creditAnchor.classList.add(`no-underline`);
 
-            //Appending all items
+            // Appending all items
             carouselItem.appendChild(albumTitle);
             carouselItem.appendChild(visitLink);
             carouselContent.appendChild(creditLink);
@@ -90,7 +94,6 @@ const initCarousel = async () => {
             carouselContent.appendChild(reviewPara);
             carouselContent.appendChild(sourcePara);
             carouselSlides.appendChild(carouselItem);
-
         });
 
         const updateSlide = () => {
