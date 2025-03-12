@@ -28,7 +28,7 @@ const initCarousel = async () => {
             carouselImage.classList.add(`carousel-image`);
 
             const img = document.createElement(`img`);
-            img.src= album.cover_image.path;
+            img.src = album.cover_image.path;
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
             carouselImage.appendChild(img);
@@ -60,7 +60,7 @@ const initCarousel = async () => {
             sourcePara.appendChild(sourceLink);
             sourceLink.classList.add(`no-underline`);
 
-            //Artist name/visit link
+            //Artist name and visit link
             const visitLink = document.createElement(`header`);
             const visitAnchor = document.createElement(`a`);
             visitAnchor.href = album.url;
