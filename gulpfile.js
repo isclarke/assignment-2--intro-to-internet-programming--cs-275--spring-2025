@@ -54,6 +54,12 @@ let styles = () => {
         .pipe(connect.reload()); // Browser reload
 };
 
+// Copy assets like images
+let copyAssets = () => {
+    return gulp.src(`img/**/*`)
+        .pipe(gulp.dest(`prod/img`));
+};
+
 // Clean and copy data.json to prod file
 let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
@@ -69,19 +75,13 @@ let minifyHTML = () => {
         .pipe(gulp.dest(`prod/html`));
 };
 
-// Copy assets like images
-let copyAssets = () => {
-    return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`prod/img`));
-};
-
 // Watch files for changes
 let watchFiles = () => {
     connect.server({ livereload: true });
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, scripts)); // Lint JS, then transpile/minify
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, styles)); // Lint CSS, then minify
-    gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData)); // Watch data.json
     gulp.watch(`img/**/*`, gulp.series(copyAssets));
+    gulp.watch(`json/data.json`, gulp.series(cleanAndCopyData)); // Watch data.json
 
 };
 
