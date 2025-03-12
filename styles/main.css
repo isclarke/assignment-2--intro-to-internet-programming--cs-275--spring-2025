@@ -36,15 +36,6 @@ h1 {
   margin: 40px;
 }
 
-.carousel-navigation {
-  position: absolute;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 640px;
-  pointer-events: auto;
-  z-index: 10;
-}
-
 .carousel-item {
   width: 640px;
   padding-left: 20px;
@@ -75,4 +66,5 @@ h1 {
   transform: translateY(525%);
   width: 100%;
   pointer-events: auto;
+  max-width: 640px;
 }
