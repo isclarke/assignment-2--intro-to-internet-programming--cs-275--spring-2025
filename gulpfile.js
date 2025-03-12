@@ -30,7 +30,7 @@ let lintJS = () => {
 
 // Transpile JS files to ES5 and compress
 let transpileJSForDev = () => {
-    return gulp.src(`dev/js/**/*.js`)
+    return gulp.src(`js/main.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
         .pipe(uglify())
         .pipe(gulp.dest(`prod/js`))
@@ -46,7 +46,7 @@ let lintCSS = () => {
 };
 
 let compileCSSForDev = () => {
-    return gulp.src(`dev/styles/**/*.css`)
+    return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
         .pipe(gulp.dest(`prod/css`))
         .pipe(connect.reload());
@@ -62,7 +62,7 @@ let cleanAndCopyData = () => {
 
 // Minify HTML and move to prod file
 let minifyHTML = () => {
-    return gulp.src(`dev/html/**/*.html`) // Changed to dev folder
+    return gulp.src(`index.html`)
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(`prod/html`));
 };
