@@ -67,4 +67,5 @@ h1 {
   width: 100%;
   pointer-events: auto;
   max-width: 640px;
+  z-index: 10;
 }
