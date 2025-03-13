@@ -41,54 +41,48 @@ let lintCSS = () => {
 let transpileJSForDev = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
-        .pipe(gulp.dest(`dev/js`)); // Output to dev directory
+        .pipe(gulp.dest(`dev/js`));
 };
 
-// Compile and minify CSS for development
 let compileCSSForDev = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
-        .pipe(gulp.dest(`dev/css`)); // Output to dev directory
+        .pipe(gulp.dest(`dev/css`));
 };
 
-// Transpile, minify JS for production
 let transpileJSForProd = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
         .pipe(uglify())
-        .pipe(gulp.dest(`prod/js`)); // Output to prod directory
+        .pipe(gulp.dest(`prod/js`));
 };
 
-// Compile and minify CSS for production
 let compileCSSForProd = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
-        .pipe(gulp.dest(`prod/css`)); // Output to prod directory
+        .pipe(gulp.dest(`prod/css`));
 };
 
-// Clean and copy data.json to prod file
 let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
         .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
-        .pipe(gulp.dest(`prod/data`)); // Output to prod directory
+        .pipe(gulp.dest(`prod/data`));
 };
 
-// Minify HTML and move to prod file
 let minifyHTML = () => {
     return gulp.src(`index.html`)
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
-        .pipe(gulp.dest(`prod/html`)); // Output to prod directory
+        .pipe(gulp.dest(`prod/html`));
 };
 
-// Copy images to development and production folders
 let copyImagesToDev = () => {
     return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`dev/img`)); // Output to dev directory
+        .pipe(gulp.dest(`dev/img`));
 };
 
 let copyImagesToProd = () => {
     return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`prod/img`)); // Output to prod directory
+        .pipe(gulp.dest(`prod/img`));
 };
 
 // Watch files for changes
@@ -98,15 +92,14 @@ let watchFiles = () => {
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, compileCSSForDev));
     gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
-    gulp.watch(`img/**/*`).on(`change`, connect.reload); // Reload on image changes
+    gulp.watch(`img/**/*`,gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
 };
 
-// Serve task
 let serve = () => {
     connect.server({
-        root: `temp`, // Serve from the temp directory
+        root: `temp`, // Serve from the temp
         livereload: true,
-        port: 8080 // You can change the port if needed
+        port: 8080
     });
 };
 
@@ -122,12 +115,12 @@ let buildDev = gulp.series(
     gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev)
 );
 
-// Combined task for development
 let dev = gulp.series(buildDev, watchFiles, serve);
 
 // Exports
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.buildProd = buildProd; // Export the production build task
 exports.buildDev = buildDev; // Export the development build task
-exports.dev = dev; // New task for development
-exports.default = gulp.series(exports.lint, buildDev, watchFiles); // Default task for development
+exports.dev = dev;
+exports.build = buildProd, buildProd;
+exports.default = gulp.series(exports.lint, buildDev, watchFiles);
