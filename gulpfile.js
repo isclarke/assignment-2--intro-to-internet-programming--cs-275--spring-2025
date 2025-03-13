@@ -3,7 +3,6 @@ const eslint = require(`gulp-eslint`);
 const stylelint = require(`gulp-stylelint`);
 const cleanCSS = require(`gulp-clean-css`);
 const uglify = require(`gulp-uglify`);
-const jsonTransform = require(`gulp-json-transform`);
 const babel = require(`gulp-babel`);
 const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
@@ -64,21 +63,28 @@ let compileCSSForProd = () => {
         .pipe(gulp.dest(`prod/css`));
 };
 
-let cleanAndCopyData = () => {
-    return gulp.src(`json/data.json`, { allowEmpty: true }) // Allow empty files
-        .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
-        .pipe(gulp.dest(`prod/data`));
-};
-
 let minifyHTML = () => {
     return gulp.src(`index.html`)
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
         .pipe(gulp.dest(`prod/html`));
 };
 
+// Copy images to development
+let copyImagesToDev = () => {
+    return gulp.src(`img/**/*`)
+        .pipe(gulp.dest(`dev/img`));
+};
+
+// Copy images to production
 let copyImagesToProd = () => {
     return gulp.src(`img/**/*`)
         .pipe(gulpIf(file => file.stat && file.stat.size > 0, gulp.dest(`prod/img`)));
+};
+
+// Copy HTML to development
+let copyHTMLToDev = () => {
+    return gulp.src(`index.html`) // Adjust this if you have multiple HTML files
+        .pipe(gulp.dest(`dev/html`));
 };
 
 // Watch files for changes
@@ -102,25 +108,23 @@ let serve = () => {
 // Build production files
 let buildProd = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForProd, compileCSSForProd, cleanAndCopyData, minifyHTML, copyImagesToProd)
+    gulp.parallel(transpileJSForProd, compileCSSForProd, minifyHTML, copyImagesToProd)
 );
 
 // Build development files
-
 let buildDev = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForProd, compileCSSForProd, cleanAndCopyData, minifyHTML, copyImagesToProd)
+    gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev, copyHTMLToDev) // Include copyHTMLToDev here
 );
 
 // Combined build task for both dev and prod
 let build = gulp.series(buildDev, buildProd);
-
 let dev = gulp.series(buildDev, watchFiles, serve);
 
 // Exports
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.buildProd = buildProd; // Export the production build task
 exports.buildDev = buildDev; // Export the development build task
-exports.build = build;
+exports.build = build; // Combined build task for both dev and prod
 exports.dev = dev; // Development task
 exports.default = gulp.series(exports.lint, buildDev, watchFiles);
