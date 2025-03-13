@@ -28,7 +28,6 @@ const createCarousel = async () => {
 
             const img = document.createElement(`img`);
             img.src = album.cover_image.path;
-            // Read width and height from data.json
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
             carouselImage.appendChild(img);
