@@ -27,12 +27,7 @@ const createCarousel = async () => {
             carouselImage.classList.add(`carousel-image`);
 
             const img = document.createElement(`img`);
-            let imgPath = album.cover_image.path;
-
-            // Underscores in path kept messing up load
-            imgPath = imgPath.replace(/_/g, ``);
-            img.src = imgPath;
-
+            img.src = album.cover_image.path;
             // Read width and height from data.json
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
