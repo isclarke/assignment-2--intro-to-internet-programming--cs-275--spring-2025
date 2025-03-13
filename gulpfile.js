@@ -44,11 +44,14 @@ let transpileJSForDev = () => {
         .pipe(gulp.dest(`dev/js`));
 };
 
+
+//Clean CSS
 let compileCSSForDev = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
         .pipe(gulp.dest(`dev/css`));
 };
+
 
 let transpileJSForProd = () => {
     return gulp.src(`js/**/*.js`)
@@ -63,6 +66,7 @@ let compileCSSForProd = () => {
         .pipe(gulp.dest(`prod/css`));
 };
 
+//Clean and transform JSON to JSONP
 let cleanAndCopyData = () => {
     return gulp.src(`json/data.json`)
         .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
