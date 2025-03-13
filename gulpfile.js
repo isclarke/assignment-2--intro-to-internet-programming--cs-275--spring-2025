@@ -8,6 +8,7 @@ const babel = require(`gulp-babel`);
 const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
+const gulpIf = require(`gulp-if`);
 
 // Create production, development, and temp directories
 let createDirs = (done) => {
@@ -44,14 +45,11 @@ let transpileJSForDev = () => {
         .pipe(gulp.dest(`dev/js`));
 };
 
-
-//Clean CSS
 let compileCSSForDev = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
         .pipe(gulp.dest(`dev/css`));
 };
-
 
 let transpileJSForProd = () => {
     return gulp.src(`js/**/*.js`)
@@ -66,9 +64,8 @@ let compileCSSForProd = () => {
         .pipe(gulp.dest(`prod/css`));
 };
 
-//Clean and transform JSON to JSONP
 let cleanAndCopyData = () => {
-    return gulp.src(`json/data.json`)
+    return gulp.src(`json/data.json`, { allowEmpty: true }) // Allow empty files
         .pipe(jsonTransform((data) => `jsonpCallback(${JSON.stringify(data)});`, 2))
         .pipe(gulp.dest(`prod/data`));
 };
@@ -79,23 +76,19 @@ let minifyHTML = () => {
         .pipe(gulp.dest(`prod/html`));
 };
 
-let copyImagesToDev = () => {
-    return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`dev/img`));
-};
-
 let copyImagesToProd = () => {
     return gulp.src(`img/**/*`)
-        .pipe(gulp.dest(`prod/img`));
+        .pipe(gulpIf(file => file.stat && file.stat.size > 0, gulp.dest(`prod/img`)));
 };
 
 // Watch files for changes
 let watchFiles = () => {
     connect.server({ livereload: true });
+
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, compileCSSForDev));
     gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
-    gulp.watch(`img/**/*`,gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
+    gulp.watch(`img/**/*`, gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
 };
 
 let serve = () => {
@@ -113,10 +106,14 @@ let buildProd = gulp.series(
 );
 
 // Build development files
+
 let buildDev = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev)
+    gulp.parallel(transpileJSForProd, compileCSSForProd, cleanAndCopyData, minifyHTML, copyImagesToProd)
 );
+
+// Combined build task for both dev and prod
+let build = gulp.series(buildDev, buildProd);
 
 let dev = gulp.series(buildDev, watchFiles, serve);
 
@@ -124,6 +121,6 @@ let dev = gulp.series(buildDev, watchFiles, serve);
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.buildProd = buildProd; // Export the production build task
 exports.buildDev = buildDev; // Export the development build task
-exports.dev = dev;
-exports.build = buildProd, buildProd;
+exports.build = build;
+exports.dev = dev; // Development task
 exports.default = gulp.series(exports.lint, buildDev, watchFiles);
