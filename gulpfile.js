@@ -13,8 +13,6 @@ const jsonToJsonp = (data, callbackName) => {
     return `${callbackName}(${JSON.stringify(data)})`;
 };
 
-
-
 // Create production, development, and temp directories
 let createDirs = (done) => {
     const dirs = [`prod/js`, `prod/css`, `prod/img`, `prod/html`, `prod/data`, `dev/js`, `dev/css`,
@@ -89,13 +87,13 @@ let copyImagesToProd = () => {
 
 // Copy HTML to development
 let copyHTMLToDev = () => {
-    return gulp.src(`index.html`) // Adjust this if you have multiple HTML files
+    return gulp.src(`index.html`)
         .pipe(gulp.dest(`dev/html`));
 };
 
 // Copy data from data.json and convert to JSONP format
 let copyData = (done) => {
-    const callbackName = `callback`; // You can change this to whatever you want
+    const callbackName = `callback`;
 
     // Temporarily copy to a temp directory
     gulp.src(`json/data.json`)
@@ -111,15 +109,12 @@ let copyData = (done) => {
                 // Convert to JSONP format
                 const jsonpData = jsonToJsonp(jsonData, callbackName);
 
-                // Write the JSONP data to dev/data and prod/data
-                fs.writeFile(`dev/data/data.json`, jsonpData, (err) => {
-                    if (err) return done(err); // Signal error if writing fails
+                fs.writeFile(`dev/data/data.json`, jsonpData, () => {
+
                 });
-                fs.writeFile(`prod/data/data.json`, jsonpData, (err) => {
-                    if (err) return done(err); // Signal error if writing fails
+                fs.writeFile(`prod/data/data.json`, jsonpData, () => {
                 });
 
-                // Signal completion
                 done();
             });
         });
