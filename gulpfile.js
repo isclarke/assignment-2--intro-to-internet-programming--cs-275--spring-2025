@@ -8,6 +8,12 @@ const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
 const gulpIf = require(`gulp-if`);
+// Convert JSON to JSONP format
+const jsonToJsonp = (data, callbackName) => {
+    return `${callbackName}(${JSON.stringify(data)})`;
+};
+
+
 
 // Create production, development, and temp directories
 let createDirs = (done) => {
@@ -87,7 +93,38 @@ let copyHTMLToDev = () => {
         .pipe(gulp.dest(`dev/html`));
 };
 
-// Watch files for changes
+// Copy data from data.json and convert to JSONP format
+let copyData = (done) => {
+    const callbackName = `callback`; // You can change this to whatever you want
+
+    // Temporarily copy to a temp directory
+    gulp.src(`json/data.json`)
+        .pipe(gulp.dest(`temp`))
+        .on(`end`, () => {
+            // Read the temporary JSON file
+            fs.readFile(`temp/data.json`, `utf8`, (err, data) => {
+                if (err) return done(err); // Signal error if reading fails
+
+                // Parse the JSON data
+                const jsonData = JSON.parse(data);
+
+                // Convert to JSONP format
+                const jsonpData = jsonToJsonp(jsonData, callbackName);
+
+                // Write the JSONP data to dev/data and prod/data
+                fs.writeFile(`dev/data/data.json`, jsonpData, (err) => {
+                    if (err) return done(err); // Signal error if writing fails
+                });
+                fs.writeFile(`prod/data/data.json`, jsonpData, (err) => {
+                    if (err) return done(err); // Signal error if writing fails
+                });
+
+                // Signal completion
+                done();
+            });
+        });
+};
+
 let watchFiles = () => {
     connect.server({ livereload: true });
 
@@ -95,6 +132,7 @@ let watchFiles = () => {
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, compileCSSForDev));
     gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
     gulp.watch(`img/**/*`, gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
+
 };
 
 let serve = () => {
@@ -108,13 +146,13 @@ let serve = () => {
 // Build production files
 let buildProd = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForProd, compileCSSForProd, minifyHTML, copyImagesToProd)
+    gulp.parallel(transpileJSForProd, compileCSSForProd, minifyHTML, copyImagesToProd, copyData)
 );
 
 // Build development files
 let buildDev = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev, copyHTMLToDev) // Include copyHTMLToDev here
+    gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev, copyHTMLToDev, copyData)
 );
 
 // Combined build task for both dev and prod
