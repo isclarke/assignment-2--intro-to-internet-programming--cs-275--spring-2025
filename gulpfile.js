@@ -88,11 +88,9 @@ let copyImagesToProd = () => {
 // Watch files for changes
 let watchFiles = () => {
     connect.server({ livereload: true });
-
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, compileCSSForDev));
-    gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
-    gulp.watch(`img/**/*`,gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
+    gulp.watch(`img/**/*`, gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
 };
 
 let serve = () => {
@@ -122,5 +120,4 @@ exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.buildProd = buildProd; // Export the production build task
 exports.buildDev = buildDev; // Export the development build task
 exports.dev = dev;
-exports.build = buildProd, buildProd;
 exports.default = gulp.series(exports.lint, buildDev, watchFiles);
