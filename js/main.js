@@ -8,7 +8,7 @@ const fetchData = async () => {
     }
 };
 
-const initCarousel = async () => {
+const createCarousel = async () => {
     const albums = await fetchData();
     if (albums) {
         const carouselSlides = document.querySelector(`.carousel-slides`);
@@ -31,8 +31,8 @@ const initCarousel = async () => {
 
             //Underscores in path kept messing up load
             imgPath = imgPath.replace(/_/g, ``);
-
             img.src = imgPath;
+
             //read width and height from data.json
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
@@ -105,7 +105,7 @@ const initCarousel = async () => {
         };
 
         // Nav's
-        const prevBtn = document.querySelector(`.carousel-navigation a:first-child`);
+        const leftButton = document.querySelector(`.carousel-navigation a:first-child`);
         const nextBtn = document.querySelector(`.carousel-navigation a:last-child`);
 
         nextBtn.addEventListener(`click`, (e) => {
@@ -114,7 +114,7 @@ const initCarousel = async () => {
             updateSlide();
         });
 
-        prevBtn.addEventListener(`click`, (e) => {
+        leftButton.addEventListener(`click`, (e) => {
             e.preventDefault();
             index = (index - 1 + albums.length) % albums.length;
             updateSlide();
@@ -125,4 +125,4 @@ const initCarousel = async () => {
 };
 
 //Call the function
-initCarousel();
+createCarousel();
