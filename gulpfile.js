@@ -6,9 +6,8 @@ const uglify = require(`gulp-uglify`);
 const jsonTransform = require(`gulp-json-transform`);
 const babel = require(`gulp-babel`);
 const connect = require(`gulp-connect`);
+const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
-const { src, dest } = require(`gulp`);
-const htmlCompressor = require(`gulp-htmlmin`);
 
 // Create production folder
 let createDirs = (done) => {
@@ -66,16 +65,15 @@ let cleanAndCopyData = () => {
         .pipe(gulp.dest(`prod/data`));
 };
 
-// Compress HTML files
-let compressHTML = () => {
-    return src(`index.html`)
-        .pipe(htmlCompressor({ collapseWhitespace: true }))
-        .pipe(dest(`prod/html`));
+// Minify HTML and move to prod file
+let minifyHTML = () => {
+    return gulp.src(`index.html`)
+        .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+        .pipe(gulp.dest(`prod/html`));
 };
 
-// Copy images to production
 let copyImages = () => {
-    return gulp.src(`img/**/*`) // Changed to `img/**/*` to include all images
+    return gulp.src(`img/**/`)
         .pipe(gulp.dest(`prod/img`));
 };
 
@@ -85,18 +83,17 @@ let watchFiles = () => {
 
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS));
-    gulp.watch(`index.html`, gulp.series(compressHTML)).on(`change`, connect.reload); // Watch for changes in index.html
+    gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
     gulp.watch(`img/**/*`).on(`change`, connect.reload); // Reload on image changes
 };
 
-// Build production files
+// Build prod files
 let buildProd = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForProd, compileCSSForProd, cleanAndCopyData, copyImages, compressHTML)
+    gulp.parallel(transpileJSForProd, compileCSSForProd, cleanAndCopyData, minifyHTML, copyImages)
 );
 
 // Exports
 exports.lint = gulp.parallel(lintJS, lintCSS);
 exports.build = gulp.series(buildProd);
 exports.default = gulp.series(exports.lint, watchFiles);
-exports.compressHTML = compressHTML;
