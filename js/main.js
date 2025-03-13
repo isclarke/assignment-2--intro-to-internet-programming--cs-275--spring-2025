@@ -14,7 +14,7 @@ const createCarousel = async () => {
         const carouselSlides = document.querySelector(`.carousel-slides`);
         let index = 0;
 
-        //Add albums to carousel items
+        // Add albums to carousel items
         albums.forEach((album, i) => {
             const carouselItem = document.createElement(`div`);
             carouselItem.classList.add(`carousel-item`);
@@ -22,35 +22,34 @@ const createCarousel = async () => {
                 carouselItem.classList.add(`active`);
             }
 
-            // Create and add the images to the caroseul
+            // Create and add the images to the carousel
             const carouselImage = document.createElement(`div`);
             carouselImage.classList.add(`carousel-image`);
 
             const img = document.createElement(`img`);
             let imgPath = album.cover_image.path;
 
-            //Underscores in path kept messing up load
+            // Underscores in path kept messing up load
             imgPath = imgPath.replace(/_/g, ``);
             img.src = imgPath;
 
-            //read width and height from data.json
+            // Read width and height from data.json
             img.width = album.cover_image.width;
             img.height = album.cover_image.height;
             carouselImage.appendChild(img);
 
-            // Create and add carosel content
+            // Create and add carousel content
             const carouselContent = document.createElement(`div`);
             carouselContent.classList.add(`carousel-content`);
 
             // Album title
             const albumTitle = document.createElement(`div`);
-            albumTitle.classList.add(`album`);
+            albumTitle.classList.add(`album`, `heading-style2`);
             albumTitle.textContent = `${album.album}`;
-            albumTitle.classList.add(`heading-style2`);
 
             // Album review
             const reviewPara = document.createElement(`p`);
-            reviewPara.appendChild(document.createTextNode(album.review.content));
+            reviewPara.textContent = album.review.content;
 
             // Source
             const sourcePara = document.createElement(`p`);
@@ -61,9 +60,8 @@ const createCarousel = async () => {
             sourceLink.href = album.review.url;
             sourceLink.target = `_blank`;
             sourceLink.textContent = album.review.source;
-            sourcePara.appendChild(dash);
-            sourcePara.appendChild(sourceLink);
             sourceLink.classList.add(`no-underline`);
+            sourcePara.append(dash, sourceLink);
 
             // Artist name and visit link
             const visitLink = document.createElement(`header`);
@@ -71,9 +69,9 @@ const createCarousel = async () => {
             visitAnchor.href = album.url;
             visitAnchor.target = `_blank`;
             visitAnchor.textContent = `${album.artist}`;
-            visitLink.appendChild(visitAnchor);
             visitAnchor.classList.add(`no-underline`);
             visitLink.classList.add(`heading-style`);
+            visitLink.appendChild(visitAnchor);
 
             // Credit link and name of creditee
             const creditLink = document.createElement(`header`);
@@ -82,21 +80,16 @@ const createCarousel = async () => {
             creditAnchor.href = album.cover_image.url;
             creditAnchor.target = `_blank`;
             creditAnchor.textContent = album.cover_image.credit;
-            creditLink.appendChild(creditAnchor);
             creditAnchor.classList.add(`no-underline`);
+            creditLink.appendChild(creditAnchor);
 
             // Appending all items
-            carouselItem.appendChild(albumTitle);
-            carouselItem.appendChild(visitLink);
-            carouselContent.appendChild(creditLink);
-            carouselItem.appendChild(carouselImage);
-            carouselItem.appendChild(carouselContent);
-            carouselContent.appendChild(reviewPara);
-            carouselContent.appendChild(sourcePara);
+            carouselItem.append(albumTitle, visitLink, carouselImage, carouselContent);
+            carouselContent.append(reviewPara, sourcePara, creditLink);
             carouselSlides.appendChild(carouselItem);
         });
 
-        //Update slides, only show one image at a time
+        // Update slides, only show one image at a time
         const updateSlide = () => {
             const items = document.querySelectorAll(`.carousel-item`);
             items.forEach((item, i) => {
@@ -104,7 +97,7 @@ const createCarousel = async () => {
             });
         };
 
-        // Nav's
+        // Navigation buttons
         const leftButton = document.querySelector(`.carousel-navigation a:first-child`);
         const nextBtn = document.querySelector(`.carousel-navigation a:last-child`);
 
@@ -124,5 +117,5 @@ const createCarousel = async () => {
     }
 };
 
-//Call the function
+// Call the function
 createCarousel();
