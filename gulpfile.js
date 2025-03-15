@@ -7,7 +7,7 @@ const babel = require(`gulp-babel`);
 const connect = require(`gulp-connect`);
 const htmlmin = require(`gulp-htmlmin`);
 const fs = require(`fs`);
-const gulpIf = require(`gulp-if`);
+
 // Convert JSON to JSONP format
 const jsonToJsonp = (data, callbackName) => {
     return `${callbackName}(${JSON.stringify(data)})`;
@@ -48,12 +48,13 @@ let transpileJSForDev = () => {
         .pipe(gulp.dest(`dev/js`));
 };
 
+// Compile CSS for development
 let compileCSSForDev = () => {
     return gulp.src(`styles/**/*.css`)
-        .pipe(cleanCSS())
-        .pipe(gulp.dest(`dev/css`));
+        .pipe(gulp.dest(`dev/css`)); // No minification for dev
 };
 
+// Transpile and minify JS files for production
 let transpileJSForProd = () => {
     return gulp.src(`js/**/*.js`)
         .pipe(babel({ presets: [`@babel/preset-env`] }))
@@ -61,12 +62,14 @@ let transpileJSForProd = () => {
         .pipe(gulp.dest(`prod/js`));
 };
 
+// Compile and minify CSS for production
 let compileCSSForProd = () => {
     return gulp.src(`styles/**/*.css`)
         .pipe(cleanCSS())
         .pipe(gulp.dest(`prod/css`));
 };
 
+// Minify HTML for production
 let minifyHTML = () => {
     return gulp.src(`index.html`)
         .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
@@ -82,13 +85,20 @@ let copyImagesToDev = () => {
 // Copy images to production
 let copyImagesToProd = () => {
     return gulp.src(`img/**/*`)
-        .pipe(gulpIf(file => file.stat && file.stat.size > 0, gulp.dest(`prod/img`)));
+        .pipe(gulp.dest(`prod/img`)); // Ensure all images are copied
 };
 
 // Copy HTML to development
 let copyHTMLToDev = () => {
     return gulp.src(`index.html`)
         .pipe(gulp.dest(`dev/html`));
+};
+
+// Copy HTML to production
+let copyHTMLToProd = () => {
+    return gulp.src(`index.html`)
+        .pipe(htmlmin({ collapseWhitespace: true, removeComments: true }))
+        .pipe(gulp.dest(`prod/html`));
 };
 
 // Copy data from data.json and convert to JSONP format
@@ -109,10 +119,11 @@ let copyData = (done) => {
                 // Convert to JSONP format
                 const jsonpData = jsonToJsonp(jsonData, callbackName);
 
-                fs.writeFile(`dev/data/data.json`, jsonpData, () => {
-
+                fs.writeFile(`dev/data/data.json`, jsonpData, (err) => {
+                    if (err) return done(err);
                 });
-                fs.writeFile(`prod/data/data.json`, jsonpData, () => {
+                fs.writeFile(`prod/data/data.json`, jsonpData, (err) => {
+                    if (err) return done(err);
                 });
 
                 done();
@@ -125,9 +136,8 @@ let watchFiles = () => {
 
     gulp.watch(`js/**/*.js`, gulp.series(lintJS, transpileJSForDev));
     gulp.watch(`styles/**/*.css`, gulp.series(lintCSS, compileCSSForDev));
-    gulp.watch(`html/**/*.html`).on(`change`, connect.reload);
-    gulp.watch(`img/**/*`, gulp.series(copyImagesToProd)).on(`change`, connect.reload); // Reload on image changes
-
+    gulp.watch(`index.html`, gulp.series(copyHTMLToDev)).on(`change`, connect.reload);
+    gulp.watch(`img/**/*`, gulp.series(copyImagesToDev)).on(`change`, connect.reload); // Reload on image changes
 };
 
 let serve = () => {
@@ -147,7 +157,7 @@ let buildProd = gulp.series(
 // Build development files
 let buildDev = gulp.series(
     createDirs,
-    gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev, copyHTMLToDev, copyData)
+    gulp.parallel(transpileJSForDev, compileCSSForDev, copyImagesToDev, copyHTMLToDev, copyHTMLToProd,copyData)
 );
 
 // Combined build task for both dev and prod
